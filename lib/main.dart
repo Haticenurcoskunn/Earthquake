@@ -1,5 +1,5 @@
-import 'package:deprem_app/deprem/deprem.dart';
 import 'package:flutter/material.dart';
+import 'all_eartquakes/all_eartquakes_list_page.dart';
 
 void main() {
   runApp(MyApp());
