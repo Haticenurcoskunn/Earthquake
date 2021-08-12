@@ -13,7 +13,7 @@ class EarthQuakePage extends StatefulWidget {
 
 class _EarthQuakePageState extends State<EarthQuakePage> {
   @override
-  void initState() async {
+  void initState() {
     super.initState();
   }
 
