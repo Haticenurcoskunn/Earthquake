@@ -10,11 +10,14 @@ GestureDetector buildEarthquakeCard(
 ) {
   return GestureDetector(
     onTap: () {
-      var enlem = snapshot.data![index].enlem;
-      var boylam = snapshot.data![index].boylam;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MapForEarthquake()),
+        MaterialPageRoute(
+          builder: (context) => MapForEarthquake(
+            lat: double.parse(snapshot.data![index].enlem),
+            lang: double.parse(snapshot.data![index].boylam),
+          ),
+        ),
       );
     },
     child: Card(

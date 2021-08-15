@@ -2,46 +2,51 @@ import 'package:deprem_app/models/deprem_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-void main() => runApp(MapForEarthquake());
-
 class MapForEarthquake extends StatefulWidget {
+  final double lat;
+  final double lang;
+  MapForEarthquake({required this.lang, required this.lat});
   @override
-  _MapForEarthquakeState createState() => _MapForEarthquakeState();
+  MapForEarthquakeState createState() =>
+      MapForEarthquakeState(lat: lat, long: lang);
 }
 
-class _MapForEarthquakeState extends State<MapForEarthquake> {
+class MapForEarthquakeState extends State<MapForEarthquake> {
+  final double lat;
+  final double long;
+  MapForEarthquakeState({required this.lat, required this.long}) {
+    _center = LatLng(lat, long);
+    _lastMapPosition = _center!;
+  }
   late GoogleMapController mapController;
 
-  static final LatLng _center = LatLng(
-      double.parse(snapshot.data![index].enlem),
-      double.parse(snapshot.data![index].boylam));
+  LatLng? _center;
+
   final Set<Marker> _markers = {};
 
   void _onMapCreated(GoogleMapController controller) {
+    _center = LatLng(37.348946, 28.103888);
     mapController = controller;
   }
 
-  LatLng _lastMapPosition = _center;
+  LatLng? _lastMapPosition;
 
   void _onCameraMove(CameraPosition position) {
     _lastMapPosition = position.target;
   }
 
-  void _onAddMarkerButtonPressed(
-    AsyncSnapshot<List<Deprem>> snapshot,
-    int index,
-  ) {
+  void _onAddMarkerButtonPressed() {
     setState(() {
       _markers.add(Marker(
         markerId: MarkerId(_lastMapPosition.toString()),
-        position: LatLng(double.parse(snapshot.data![index].enlem),
-            double.parse(snapshot.data![index].boylam)),
+        position: LatLng(widget.lat, widget.lang),
         infoWindow: InfoWindow(
           title: 'Really cool place',
           snippet: '5 Star Rating',
         ),
         icon: BitmapDescriptor.defaultMarker,
       ));
+      _lastMapPosition = _center;
     });
   }
 
@@ -58,14 +63,16 @@ class _MapForEarthquakeState extends State<MapForEarthquake> {
             GoogleMap(
               onMapCreated: _onMapCreated,
               initialCameraPosition: CameraPosition(
-                target: _center,
+                target: _center!,
                 zoom: 10,
               ),
               markers: _markers,
               onCameraMove: _onCameraMove,
             ),
             FloatingActionButton(
-              onPressed: () => _onAddMarkerButtonPressed,
+              onPressed: () {
+                _onAddMarkerButtonPressed();
+              },
               materialTapTargetSize: MaterialTapTargetSize.padded,
               backgroundColor: Colors.green,
               child: const Icon(Icons.add_location, size: 24),
