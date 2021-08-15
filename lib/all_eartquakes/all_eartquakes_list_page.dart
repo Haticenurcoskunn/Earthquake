@@ -1,4 +1,5 @@
-import 'package:deprem_app/all_eartquakes/widgets.dart';
+import 'package:deprem_app/all_eartquakes/widgets/appbar.dart';
+import 'package:deprem_app/all_eartquakes/widgets/earthquakeStructure.dart';
 import 'package:deprem_app/constants/styles/colors.dart';
 import 'package:deprem_app/models/deprem_model.dart';
 import 'package:deprem_app/utils/connection/requests/get_all_requests.dart';
@@ -31,13 +32,12 @@ class _EarthQuakePageState extends State<EarthQuakePage> {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  return buildEarthquakeCard(snapshot, index);
+                  return buildEarthquakeCard(snapshot, index, context);
                 },
               );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
-            // By default, show a loading spinner
             return CircularProgressIndicator();
           },
         ),
