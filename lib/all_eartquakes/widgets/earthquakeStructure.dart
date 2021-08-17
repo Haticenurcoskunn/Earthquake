@@ -8,52 +8,60 @@ GestureDetector buildEarthquakeCard(
   int index,
   BuildContext context,
 ) {
+  List<double> enlemList = [];
+  List<double> boylamList = [];
+
   return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MapForEarthquake(
-            lat: double.parse(snapshot.data![index].enlem),
-            lang: double.parse(snapshot.data![index].boylam),
-          ),
-        ),
-      );
-    },
-    child: Card(
-      child: ListTile(
-        leading: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${snapshot.data == null ? '0.0' : snapshot.data![index].yer}",
-              style: AppTextStyles().eartquakeCardTextStyle,
+      onTap: () {
+        for (var i = 0; i < 20; i++) {
+          enlemList.add(double.parse(snapshot.data![i].enlem));
+        }
+        for (var j = 0; j < 20; j++) {
+          boylamList.add(double.parse(snapshot.data![j].boylam));
+        }
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapForEarthquake(
+              boylamList: boylamList,
+              enlemList: enlemList,
             ),
-            Text(
-                "${snapshot.data == null ? '0.0' : snapshot.data![index].tarih}"),
-            Text(
-                "${snapshot.data == null ? '0.0' : snapshot.data![index].saat}"),
-          ],
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-                "büyüklük: ${snapshot.data == null ? '0.0' : snapshot.data![index].buyukluk}"),
-            Text(
-                "derinlik:${snapshot.data == null ? '0.0' : snapshot.data![index].derinlik}"),
-            Text(
-                "enlem: ${snapshot.data == null ? '0.0' : snapshot.data![index].enlem}"),
-            Text(
-                "boylam: ${snapshot.data == null ? '0.0' : snapshot.data![index].boylam}"),
-          ],
-        ),
-      ),
-      margin: EdgeInsets.all(20),
-      shape: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color: Colors.deepOrange.shade200, width: 6),
-      ),
-    ),
-  );
+          ),
+        );
+      },
+      child: Card(
+          child: ListTile(
+            leading: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${snapshot.data == null ? '0.0' : snapshot.data![index].yer}",
+                  style: AppTextStyles().eartquakeCardTextStyle,
+                ),
+                Text(
+                    "${snapshot.data == null ? '0.0' : snapshot.data![index].tarih}"),
+                Text(
+                    "${snapshot.data == null ? '0.0' : snapshot.data![index].saat}"),
+              ],
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                    "büyüklük: ${snapshot.data == null ? '0.0' : snapshot.data![index].buyukluk}"),
+                Text(
+                    "derinlik:${snapshot.data == null ? '0.0' : snapshot.data![index].derinlik}"),
+                Text(
+                    "enlem: ${snapshot.data == null ? '0.0' : snapshot.data![index].enlem}"),
+                Text(
+                    "boylam: ${snapshot.data == null ? '0.0' : snapshot.data![index].boylam}"),
+              ],
+            ),
+          ),
+          margin: EdgeInsets.all(20),
+          shape: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.deepOrange.shade200, width: 6),
+          )));
 }

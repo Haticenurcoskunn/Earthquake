@@ -1,28 +1,41 @@
-import 'package:deprem_app/models/deprem_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapForEarthquake extends StatefulWidget {
-  final double lat;
-  final double lang;
-  MapForEarthquake({required this.lang, required this.lat});
+  List enlemList = [];
+  List boylamList = [];
+  MapForEarthquake({required this.enlemList, required this.boylamList});
   @override
   MapForEarthquakeState createState() =>
-      MapForEarthquakeState(lat: lat, long: lang);
+      MapForEarthquakeState(enlemList: enlemList, boylamList: boylamList);
 }
 
 class MapForEarthquakeState extends State<MapForEarthquake> {
-  final double lat;
-  final double long;
-  MapForEarthquakeState({required this.lat, required this.long}) {
-    _center = LatLng(lat, long);
+  List enlemList = [];
+  List boylamList = [];
+  final Set<Marker> _markers = {};
+  MapForEarthquakeState({required this.enlemList, required this.boylamList}) {
+    for (var i = 0; i < 20; i++) {
+      _markers.add(
+        Marker(
+          markerId: MarkerId(_lastMapPosition.toString()),
+          position: LatLng(enlemList[i], boylamList[i]),
+          infoWindow: InfoWindow(
+            title: 'Really cool place',
+            snippet: '5 Star Rating',
+          ),
+          icon: BitmapDescriptor.defaultMarker,
+        ),
+      );
+    }
+
+    _center = LatLng(37.348946, 28.103888);
     _lastMapPosition = _center!;
   }
+
   late GoogleMapController mapController;
 
   LatLng? _center;
-
-  final Set<Marker> _markers = {};
 
   void _onMapCreated(GoogleMapController controller) {
     _center = LatLng(37.348946, 28.103888);
@@ -33,21 +46,6 @@ class MapForEarthquakeState extends State<MapForEarthquake> {
 
   void _onCameraMove(CameraPosition position) {
     _lastMapPosition = position.target;
-  }
-
-  void _onAddMarkerButtonPressed() {
-    setState(() {
-      _markers.add(Marker(
-        markerId: MarkerId(_lastMapPosition.toString()),
-        position: LatLng(widget.lat, widget.lang),
-        infoWindow: InfoWindow(
-          title: 'Really cool place',
-          snippet: '5 Star Rating',
-        ),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-      _lastMapPosition = _center;
-    });
   }
 
   @override
@@ -68,14 +66,6 @@ class MapForEarthquakeState extends State<MapForEarthquake> {
               ),
               markers: _markers,
               onCameraMove: _onCameraMove,
-            ),
-            FloatingActionButton(
-              onPressed: () {
-                _onAddMarkerButtonPressed();
-              },
-              materialTapTargetSize: MaterialTapTargetSize.padded,
-              backgroundColor: Colors.green,
-              child: const Icon(Icons.add_location, size: 24),
             ),
           ],
         ),
